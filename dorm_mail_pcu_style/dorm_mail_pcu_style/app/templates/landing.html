@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% set header = "생활관 우편물 수령 관리 시스템" %}
+{% set sub = "공동 보관 환경에서 발생할 수 있는 수령 혼선을 줄이고, 등록·알림·확인·기록 절차를 보다 명확하게 관리하기 위한 생활관 내부 서비스 시범 구현입니다." %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-panel">
+    <h2>보다 명확한 우편물 수령 절차</h2>
+    <p>우편물 도착 등록부터 학생 알림, 수령 코드 확인, 본인 확인 후 수령 완료, 미수령 관리와 처리 이력 저장까지 한 흐름으로 구성했습니다.</p>
+    <div class="flow">
+      <span>우편물 등록</span>
+      <span>도착 알림</span>
+      <span>PIN 발급</span>
+      <span>QR 발급</span>
+      <span>학생 확인</span>
+      <span>수령 완료</span>
+      <span>처리 기록</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>서비스 구성</h3>
+    <div class="help">
+      · 관리자 화면: 우편물 등록, 상태 관리, 미수령 분류<br>
+      · 학생 화면: 도착 알림 확인, 수령 코드 확인, 수령 처리<br>
+      · 수령 이력 화면: 등록·수령·미수령 분류 이력 확인
+    </div>
+  </div>
+</section>
+
+<section class="login-grid">
+  <div class="panel">
+    <div class="card-title">관리자 접속</div>
+    <div class="help">생활관 담당자 또는 근로학생이 우편물 도착 등록, 수령 상태 관리, 미수령 분류를 진행하는 화면으로 연결됩니다.</div>
+    <form method="post" action="/login/admin" style="margin-top:16px">
+      <button type="submit">관리자 화면 열기</button>
+    </form>
+  </div>
+
+  <div class="panel">
+    <div class="card-title">학생 접속</div>
+    <div class="help">학생 이름과 호실 기준으로 본인 우편물 알림과 수령 코드(PIN/QR)를 확인하고 수령 처리할 수 있습니다.</div>
+    <form method="post" action="/login/student" class="form-grid" style="margin-top:16px">
+      <input name="student_name" placeholder="학생 이름 (예: 김하늘)" required>
+      <input name="dorm_room" placeholder="호실 (예: 여자기숙사 402호)" required>
+      <button class="full" type="submit">학생 화면 열기</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

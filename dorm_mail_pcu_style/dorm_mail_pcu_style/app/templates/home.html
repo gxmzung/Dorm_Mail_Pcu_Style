@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+{% set header = "생활관 우편물 수령 관리 현황" %}
+{% set sub = "생활관 내 우편물 등록, 알림, 본인 확인, 수령 완료, 미수령 관리까지의 상태를 요약하여 보여주는 화면입니다." %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-panel">
+    <h2>등록부터 수령까지 한 화면 요약</h2>
+    <p>현재 등록된 우편물 수, 수령 대기 건수, 수령 완료 건수, 미수령 분류 건수를 확인할 수 있으며, 최근 알림과 처리 이력도 함께 조회할 수 있습니다.</p>
+    <div class="flow">
+      <span>도착 등록</span>
+      <span>학생 알림</span>
+      <span>수령 코드 확인</span>
+      <span>수령 완료</span>
+      <span>처리 이력 저장</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>서비스 목적</h3>
+    <div class="help">
+      공동 보관 환경에서 발생할 수 있는 수령 혼선을 줄이고, 생활관 운영 측면에서도 보다 명확한 기록을 남길 수 있도록 하는 내부 서비스형 시범 구현입니다.
+    </div>
+  </div>
+</section>
+
+<section class="metrics">
+  <div class="metric-card"><div class="label">전체 등록 건수</div><div class="value">{{ total }}</div></div>
+  <div class="metric-card"><div class="label">수령 대기</div><div class="value">{{ ready }}</div></div>
+  <div class="metric-card"><div class="label">수령 완료</div><div class="value">{{ picked }}</div></div>
+  <div class="metric-card"><div class="label">미수령 분류</div><div class="value">{{ overdue }}</div></div>
+</section>
+
+<section class="split">
+  <div class="panel">
+    <h3>최근 우편물 현황</h3>
+    <table class="table">
+      <thead>
+        <tr><th>번호</th><th>학생명</th><th>호실</th><th>택배사</th><th>도착 시각</th><th>상태</th></tr>
+      </thead>
+      <tbody>
+      {% for r in rows[:6] %}
+        <tr>
+          <td>{{ r.id }}</td>
+          <td>{{ r.student_name }}</td>
+          <td>{{ r.dorm_room }}</td>
+          <td>{{ r.carrier }}</td>
+          <td>{{ r.arrived_at }}</td>
+          <td>
+            {% if r.status == 'READY' %}<span class="badge ready">수령 대기</span>{% endif %}
+            {% if r.status == 'PICKED' %}<span class="badge picked">수령 완료</span>{% endif %}
+            {% if r.status == 'OVERDUE' %}<span class="badge overdue">미수령</span>{% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <h3>최근 알림 / 처리 내역</h3>
+    {% for n in notifications %}
+      <div class="notice {% if n.is_read == 0 %}unread{% endif %}">
+        <strong>{{ n.title }}</strong>
+        <div class="small">{{ n.student_name }} · {{ n.dorm_room }}</div>
+        <div>{{ n.body }}</div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

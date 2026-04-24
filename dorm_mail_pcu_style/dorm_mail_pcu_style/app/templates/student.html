@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+{% set header = "내 우편물 수령 정보" %}
+{% set sub = "학생별 도착 알림, 수령 코드(PIN/QR), 수령 상태를 확인하고 본인 수령 처리를 진행하는 화면입니다." %}
+
+{% block content %}
+<section class="metrics">
+  <div class="metric-card">
+    <div class="label">수령 대기</div>
+    <div class="value">{{ rows | selectattr("status", "equalto", "READY") | list | length }}</div>
+  </div>
+  <div class="metric-card">
+    <div class="label">수령 완료</div>
+    <div class="value">{{ rows | selectattr("status", "equalto", "PICKED") | list | length }}</div>
+  </div>
+  <div class="metric-card">
+    <div class="label">미수령 분류</div>
+    <div class="value">{{ rows | selectattr("status", "equalto", "OVERDUE") | list | length }}</div>
+  </div>
+  <div class="metric-card">
+    <div class="label">전체 조회 건수</div>
+    <div class="value">{{ rows|length }}</div>
+  </div>
+</section>
+
+<section class="split">
+  <div class="panel">
+    <h3>도착 알림</h3>
+    {% for n in notices %}
+      <div class="notice {% if n.is_read == 0 %}unread{% endif %}">
+        <strong>{{ n.title }}</strong>
+        <div class="small">{{ n.created_at }}</div>
+        <div>{{ n.body }}</div>
+        {% if n.is_read == 0 %}
+        <form method="post" action="/student/read-notice" style="margin-top:10px">
+          <input type="hidden" name="notification_id" value="{{ n.id }}">
+          <button type="submit">읽음 처리</button>
+        </form>
+        {% endif %}
+      </div>
+    {% else %}
+      <div class="help">도착한 우편물 알림이 없습니다.</div>
+    {% endfor %}
+  </div>
+
+  <div class="panel">
+    <h3>내 우편물 목록</h3>
+    {% for r in rows %}
+      <div class="notice">
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
+          <div>
+            <strong>{{ r.item_type }}</strong>
+            <div class="small">{{ r.carrier }} · {{ r.arrived_at }}</div>
+            <div style="margin-top:8px">PIN <strong>{{ r.pin_code }}</strong></div>
+            <div class="small" style="margin-top:6px">
+              상태:
+              {% if r.status == 'READY' %}<span class="badge ready">수령 대기</span>{% endif %}
+              {% if r.status == 'PICKED' %}<span class="badge picked">수령 완료</span>{% endif %}
+              {% if r.status == 'OVERDUE' %}<span class="badge overdue">미수령</span>{% endif %}
+            </div>
+          </div>
+
+          <div class="qr-box">
+            <img src="{{ r.qr_path }}" alt="QR">
+          </div>
+        </div>
+
+        {% if r.status != 'PICKED' %}
+        <div style="margin-top:12px">
+          <form method="post" action="/student/pickup/pin" class="inline-form">
+            <input type="hidden" name="parcel_id" value="{{ r.id }}">
+            <input name="pin_code" placeholder="PIN 입력">
+            <button type="submit">PIN으로 수령 확인</button>
+            <a href="/student/pickup/qr/{{ r.pickup_token }}">QR로 수령 확인</a>
+          </form>
+        </div>
+        {% else %}
+        <div class="small" style="margin-top:10px">수령 확인자: {{ r.verified_by }}</div>
+        {% endif %}
+      </div>
+    {% else %}
+      <div class="help">조회된 우편물이 없습니다.</div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title or "생활관 우편물 수령 관리 시스템" }}</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="utility">
+    <div class="inner">
+      <div>PAI CHAI UNIVERSITY · 생활관 내부 서비스</div>
+      <div>
+        <a href="/">HOME</a>
+        <a href="/home">서비스 안내</a>
+        <a href="/logs">수령 이력</a>
+        {% if user %}<a href="/logout">LOGOUT</a>{% endif %}
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="inner">
+      <div class="brand">
+        <div class="school">배재대학교 생활관</div>
+        <div class="service">{{ header }}</div>
+        <div class="desc">{{ sub }}</div>
+      </div>
+
+      <nav class="main-nav">
+        <a href="/">로그인</a>
+        <a href="/home">홈</a>
+        <a href="/admin">관리자</a>
+        <a href="/student">학생</a>
+        <a href="/logs">수령 이력</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    {% if user %}
+    <section class="panel user-box">
+      <div class="role">현재 접속 사용자</div>
+      <div class="name">{{ "생활관 담당자" if user.role == "admin" else user.student_name }}</div>
+      <div class="room">{{ user.role }} {{ user.dorm_room }}</div>
+    </section>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>
