@@ -1,0 +1,15 @@
+node_modules/
+.venv/
+venv/
+build/
+target/
+obj/
+__pycache__/
+.pytest_cache/
+.dart_tool/
+.idea/
+*.sqlite
+*.db
+*.log
+.env
+.DS_Store
