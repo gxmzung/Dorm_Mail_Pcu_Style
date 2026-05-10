@@ -1,104 +1,179 @@
-# Dorm Mail Management System
+# Dorm Mail PCU Style
 
-배재대학교 기숙사 우편물 수령 과정을 보다 명확하고 안전하게 관리하기 위한 파일럿 웹 시스템입니다.
+### Dormitory Mail and Lost-Item Management Prototype
 
-공동 보관 구조에서 발생할 수 있는 분실, 오인 수령, 기록 부재 문제를 줄이기 위해  
-**도착 등록 → 학생 알림 → PIN / QR 발급 → 본인 확인 → 수령 완료 로그 저장**  
-흐름으로 설계했습니다.
+Dorm Mail PCU Style is a small campus-operations prototype for managing dormitory mail, parcel pickup, and lost-item handling.
 
----
+The project focuses on a practical dormitory problem: when parcels or lost items are stored in a shared place, it can be difficult to verify who received what, when it was received, and whether the item is still pending.
 
-## Overview
-
-기숙사 우편물은 학생 생활과 밀접한 기본 서비스이지만,  
-공동 보관 및 공동 수령 구조에서는 다음과 같은 문제가 발생할 수 있습니다.
-
-- 수령자의 본인 확인 절차가 충분히 명확하지 않음
-- 누가 언제 수령했는지 기록이 남지 않음
-- 분실 또는 오인 수령 발생 시 즉시 확인이 어려움
-- 반복되는 불편이 운영 개선으로 연결되지 않음
-
-이 프로젝트는 위 문제를 해결하기 위해  
-**등록 가능한 수령 절차와 추적 가능한 기록 구조**를 구현한 시범 시스템입니다.
+This repository is not a production dormitory system.  
+It is a pilot-style web prototype for showing how a simple registration, notification, verification, and pickup-log flow can reduce confusion.
 
 ---
 
-## Core Features
+## Why This Project Exists
 
-### 1. 관리자 기능
-- 우편물 도착 등록
-- 학생 이름 / 호실 / 택배사 / 물품 유형 입력
-- 1회용 PIN 생성
-- QR 코드 생성
-- 수령 상태 관리
-- 미수령 물품 분류
-- 수령 이력 확인
+Dormitory mail and lost-item handling can create repeated operational problems.
 
-### 2. 학생 기능
-- 본인 우편물 도착 알림 확인
-- PIN / QR 수령 코드 확인
-- PIN 기반 수령 완료 처리
-- QR 기반 수령 완료 처리
-- 수령 상태 확인
+Common issues include:
 
-### 3. 기록 기능
-- 등록 이력 저장
-- 수령 완료 이력 저장
-- 미수령 분류 기록 저장
-- 처리 주체 및 시각 로그 관리
+- unclear pickup ownership
+- missing pickup records
+- mistaken pickup
+- delayed student notification
+- difficulty checking long-unclaimed items
+- no structured record for later review
+
+This project turns the process into a traceable workflow.
+
+```text
+arrival registration
+→ student notification
+→ PIN / QR pickup code
+→ identity check
+→ pickup completion log
+```
+
+---
+
+## Main Features
+
+### Admin Flow
+
+- register arriving mail or parcel
+- input student name / room / carrier / item type
+- generate one-time PIN
+- generate QR code
+- update pickup status
+- classify unclaimed items
+- check pickup history
+
+### Student Flow
+
+- check arrival notification
+- view PIN / QR pickup code
+- complete pickup with PIN
+- complete pickup with QR
+- check pickup status
+
+### Record Flow
+
+- save registration history
+- save pickup completion history
+- record unclaimed item state
+- store processing time and status
 
 ---
 
 ## System Flow
 
-1. 우편물 도착
-2. 관리자 등록
-3. 학생 대상 도착 알림 제공
-4. PIN / QR 발급
-5. 학생 본인 확인 후 수령
-6. 수령 완료 로그 저장
-7. 장기 미수령 물품 별도 분류
+```text
+1. Mail or parcel arrives
+2. Admin registers item
+3. Student receives or checks arrival notice
+4. PIN / QR pickup code is generated
+5. Student verifies pickup
+6. Pickup completion log is stored
+7. Long-unclaimed items are separated for review
+```
 
 ---
 
-## Screens
+## Screens / Pages
 
-- 로그인 및 역할 선택 화면
-- 관리자 우편물 등록 화면
-- PIN / QR 발급 결과 화면
-- 학생 도착 알림 화면
-- 학생 수령 코드 확인 화면
-- 수령 이력 / 로그 화면
+Planned or implemented page types:
+
+- login / role selection
+- admin mail registration
+- PIN / QR generation result
+- student arrival notification
+- student pickup code check
+- pickup history and logs
 
 ---
 
 ## Tech Stack
 
-### Frontend
-- HTML
-- CSS
-- Jinja2 Template
-
 ### Backend
+
 - Python
 - FastAPI
+- Uvicorn
+
+### Frontend
+
+- HTML
+- CSS
+- Jinja2 Templates
 
 ### Data
+
 - SQLite
 
 ### Utility
-- QR Code Generator
-- Uvicorn
+
+- QR code generation
+- pickup status tracking
 
 ---
 
-## Project Structure
+## Repository Structure
 
-```bash
-dorm_mail_system/
-├─ app/
-│  ├─ main.py
-│  ├─ templates/
-│  └─ static/
-├─ requirements.txt
-└─ README.md
+```text
+Dorm_Mail_Pcu_Style/
+├─ README.md
+└─ dorm_mail_pcu_style/
+   └─ dorm_mail_pcu_style/
+      ├─ app/
+      │  └─ main.py
+      ├─ requirements.txt
+      └─ README.md
+```
+
+---
+
+## Position in Portfolio
+
+This repository is a supporting campus-service project.
+
+It is smaller than `CityBrain` or `paejae-campus-os-v1`, but it shows a practical approach to campus operations:
+
+| Repository | Role |
+|---|---|
+| `CityBrain` | cafeteria-centered smart campus MVP |
+| `paejae-campus-os-v1` | broader smart campus platform scaffold |
+| `Dorm_Mail_Pcu_Style` | small dormitory mail / lost-item workflow prototype |
+
+---
+
+## Current Limits
+
+This project does **not** claim:
+
+- official dormitory deployment
+- production-grade authentication
+- real student information system integration
+- complete privacy review
+- production database hardening
+- full notification service integration
+
+It is a prototype for workflow design and campus operations thinking.
+
+---
+
+## Future Work
+
+- add login and role-based access control
+- add admin audit logs
+- add real notification integration
+- improve student lookup flow
+- add item photo upload
+- add long-unclaimed item dashboard
+- add privacy and data retention policy
+- improve QR/PIN expiration logic
+
+---
+
+## Status
+
+Dorm Mail PCU Style is a campus-operations prototype focused on dormitory mail, parcel pickup, and lost-item workflow management.
